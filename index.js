@@ -26,6 +26,7 @@ app.get('/', (req, res) => res.send('Hello World HIHIHI'))
 
 
 app.post('/api/users/register', (req, res) => {
+  console.log("req >> " + req);
   // 회원 가입 할 때 필요한 정보들을 client에서 가져오면
   // 그것들을 데이터 베이스에 넣어준다.  
   const user = new User(req.body);
@@ -38,8 +39,10 @@ app.post('/api/users/register', (req, res) => {
 
 })
 
+// API 실행시 callback req로 user 정보가 들어온다.
 app.post('/api/users/login', (req, res) => {
   // 요청된 이메일을 데이터베이스에서 있는지 찾는다.
+  // User 는 mongoose의 Schema // findOne 은 mongoose Schema의 메소드
   User.findOne({email: req.body.email}, (err, user) => {
     if (!user) {
       return res.json({

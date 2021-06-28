@@ -34,6 +34,8 @@ const userSchema = mongoose.Schema({
     }
 });
 
+// Schema의 변화에 저장(save)이 이루어질때 선행되어야 하는 부분
+// next는 선행되어야 할 부분이 끝나면 다음 단계로 넘어가도록 하는 함수
 userSchema.pre('save', function(next) {
     let user = this;
     if (user.isModified('password')) {
@@ -51,9 +53,12 @@ userSchema.pre('save', function(next) {
     }
 })
 
+// mongoose Schema의 메소드를 만들 수 있는 methods
 userSchema.methods.comparePassword = function(plainPassword, callback) {
     // plainPassword와 암호화된 비밀번호 비교
     // plainPassword도 암호화 하여 비교
+    // plainPassword는 사용자가 입력한 값
+    // this 관련 정보는 userSchema이며 mongoDB에 저장된 값이다.
     bcrypt.compare(plainPassword, this.password, function(err, isMatch) {
         if (err) return callback(err);
         callback(null, isMatch);
@@ -65,6 +70,8 @@ userSchema.methods.generateToken = function(callback) {
 
     // jsonwebtoken을 이용하여 token을 생성하기
     let token = jwt.sign(user._id.toHexString(), "secretToken");
+
+    // 토큰을 생성하여 저장한다.
     user.token = token;
     user.save(function(err, user) {
         if (err) return callback(err);
