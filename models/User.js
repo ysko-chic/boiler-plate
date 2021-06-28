@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema({
     },
     password: {
         type: String,
-        maxlength: 5
+        maxlength: 8
     },
     lastname: {
         type: String,
@@ -33,4 +33,4 @@ const userSchema = mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-module.export = {User};
+module.exports = { User };
